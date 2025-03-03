@@ -1,0 +1,137 @@
+/* Variables globales */
+:root {
+    --celeste: #00797E;
+    --verde-oscuro: #0D4B56;
+    --verde-claro: #22694c;
+    --beige: #D8E6B5;
+    --mostaza: yellow;
+}
+
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--beige);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Encabezado */
+.header-container {
+    width: 100%;
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    margin-bottom: 2rem; /* Espacio entre el encabezado y la tabla */
+}
+
+h1 {
+    color: white;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    margin: 0;
+}
+
+/* Contenedor de la tabla */
+.table-container {
+    width: 90%;
+    max-width: 800px;
+    margin: 0 auto; /* Centra la tabla */
+    overflow-x: auto; /* Habilita desplazamiento horizontal si es necesario */
+}
+
+/* Estilos de la tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    margin: 0 auto; /* Centra la tabla dentro del contenedor */
+}
+
+th, td {
+    padding: 12px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+th {
+    background-color: var(--verde-claro);
+    color: white;
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Botones de edición */
+.editBtn {
+    background-color: #ffc107;
+    color: black;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.editBtn:hover {
+    background-color: #f29b0f;
+}
+
+/* Botón "Agregar Nuevo" */
+#addBtn {
+    background-color: var(--verde-claro);
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#addBtn:hover {
+    background-color: #0a521a;
+}
+
+.centered-button {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+/* Diseño responsivo */
+@media (max-width: 600px) {
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+
+    thead tr {
+        display: none;
+    }
+
+    tr {
+        margin-bottom: 1rem;
+        border: 1px solid #ccc;
+        padding: 10px;
+        background: white;
+    }
+
+    td {
+        text-align: right;
+        position: relative;
+        padding-left: 50%;
+    }
+
+    td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        font-weight: bold;
+        text-align: left;
+    }
+}

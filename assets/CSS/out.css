@@ -1,0 +1,89 @@
+body {
+    background-image: url('../img/fond.jpg'); 
+    background-size: cover;
+    background-position: center; 
+    background-repeat: no-repeat; 
+    background-attachment: fixed; 
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    height: 100vh; /* Altura total de la ventana */
+}
+.container {
+    max-width: 90%;
+    width: 100%;
+    text-align: center; /* Alinea el contenido al centro */
+}
+.form-container {
+    background-color: #AABF70;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px; /* Ancho máximo del formulario */
+    margin: 0 auto; /* Centra horizontalmente */
+}
+.form-inner {
+    background-color: #D9D2B0;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center; /* Alinea el texto al centro */
+}
+.form-inner img {
+    max-height: 160px; /* Altura máxima de la imagen */
+    width: auto;
+    margin-bottom: 20px;
+}
+h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 10px;
+}
+p {
+    font-size: 1rem;
+    color: white;
+    margin-bottom: 20px;
+}
+.button-container {
+    display: flex;
+    flex-direction: column; /* Apila los botones verticalmente en pantallas pequeñas */
+    gap: 10px; /* Espacio entre los botones */
+    justify-content: center; /* Centra los botones horizontalmente */
+}
+@media (min-width: 640px) {
+    .button-container {
+        flex-direction: row; /* Coloca los botones en fila en pantallas más grandes */
+    }
+}
+button {
+    padding: 12px 24px;
+    border-radius: 8px;
+    border: none;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%; /* Ocupa todo el ancho en pantallas pequeñas */
+}
+@media (min-width: 640px) {
+    button {
+        width: 180px; /* Ancho fijo en pantallas más grandes */
+    }
+}
+#yes {
+    background-color: #E74C3C;
+    color: white;
+}
+#yes:hover {
+    background-color: #5e3535;
+}
+#no {
+    background-color: #53A670;
+    color: white;
+}
+#no:hover {
+    background-color: #1C4029;
+}

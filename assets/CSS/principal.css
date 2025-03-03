@@ -1,0 +1,29 @@
+/* Estilos adicionales para el info-box */
+.info-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 220px;
+    max-height: 300px; /* Altura máxima para limitar el tamaño */
+    background: #18919A;
+    color: white;
+    padding: 20px;
+    text-align: left;
+    font-size: 16px;
+    display: none; /* Oculto por defecto */
+    z-index: 10;
+    border: 3px solid black;
+    overflow-y: auto; /* Agrega un scrollbar vertical si es necesario */
+    box-sizing: border-box; /* Asegura que el padding no aumente el tamaño total */
+}
+
+/* Mostrar el info-box al pasar el cursor */
+.button-container:hover .info-box {
+    display: block;
+}
+
+.button-container {
+    position: relative;
+    display: inline-block;
+}
