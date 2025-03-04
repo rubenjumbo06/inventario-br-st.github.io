@@ -1,137 +1,77 @@
-/* Variables globales */
-:root {
-    --celeste: #00797E;
-    --verde-oscuro: #0D4B56;
-    --verde-claro: #22694c;
-    --beige: #D8E6B5;
-    --mostaza: yellow;
-}
-
-/* Estilos generales */
 body {
     font-family: Arial, sans-serif;
-    background-color: var(--beige);
+    background-color: #d7e3b5; /* Color beige */
     margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
-/* Encabezado */
-.header-container {
-    width: 100%;
-    display: flex;
-    justify-content: center; /* Centra horizontalmente */
-    align-items: center; /* Centra verticalmente */
-    margin-bottom: 2rem; /* Espacio entre el encabezado y la tabla */
+.container {
+    width: 90%;
+    margin: auto;
+    background: #d7e3b5; /* Fondo igual al de la imagen */
+    padding: 20px;
+    border-radius: 8px;
 }
 
-h1 {
-    color: white;
-    text-align: center;
+.title {
     font-size: 2rem;
     font-weight: bold;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    margin: 0;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: white;
 }
 
-/* Contenedor de la tabla */
-.table-container {
-    width: 90%;
-    max-width: 800px;
-    margin: 0 auto; /* Centra la tabla */
-    overflow-x: auto; /* Habilita desplazamiento horizontal si es necesario */
-}
-
-/* Estilos de la tabla */
 table {
     width: 100%;
     border-collapse: collapse;
-    background-color: white;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    margin: 0 auto; /* Centra la tabla dentro del contenedor */
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid #0f3d0f; /* Color verde oscuro */
 }
 
 th, td {
-    padding: 12px;
-    border: 1px solid #ccc;
+    padding: 10px;
     text-align: center;
 }
 
 th {
-    background-color: var(--verde-claro);
+    background-color: #0f3d0f; /* Verde oscuro */
     color: white;
-    font-weight: bold;
 }
 
 tr:nth-child(even) {
-    background-color: #f2f2f2;
+    background-color: #ffffff;
 }
 
-/* Botones de edición */
 .editBtn {
-    background-color: #ffc107;
+    background-color: #ffc107; /* Amarillo */
     color: black;
-    padding: 6px 10px;
     border: none;
-    border-radius: 5px;
+    padding: 6px 12px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    border-radius: 5px;
 }
 
 .editBtn:hover {
-    background-color: #f29b0f;
+    background-color: #e0a800;
 }
 
-/* Botón "Agregar Nuevo" */
 #addBtn {
-    background-color: var(--verde-claro);
+    background-color: #0f3d0f; /* Verde oscuro */
     color: white;
-    padding: 10px 15px;
     border: none;
-    border-radius: 5px;
+    padding: 8px 15px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    border-radius: 5px;
 }
 
 #addBtn:hover {
-    background-color: #0a521a;
+    background-color: #0c2e0c;
 }
 
 .centered-button {
     text-align: center;
-    margin-top: 1rem;
-}
-
-/* Diseño responsivo */
-@media (max-width: 600px) {
-    table, thead, tbody, th, td, tr {
-        display: block;
-    }
-
-    thead tr {
-        display: none;
-    }
-
-    tr {
-        margin-bottom: 1rem;
-        border: 1px solid #ccc;
-        padding: 10px;
-        background: white;
-    }
-
-    td {
-        text-align: right;
-        position: relative;
-        padding-left: 50%;
-    }
-
-    td::before {
-        content: attr(data-label);
-        position: absolute;
-        left: 10px;
-        font-weight: bold;
-        text-align: left;
-    }
+    margin-top: 20px;
 }
