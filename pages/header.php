@@ -41,42 +41,5 @@ $role = $_SESSION['role'] ?? '';
             </button>
         </a>
     </header>
-
-    <!-- Contenedor Principal -->
-
-        <div class="flex justify-between items-center mt-4 px-4">
-            <p class="text-white text-sm sm:text-lg text-shadow">
-                <strong>User:</strong> <?php echo htmlspecialchars($usuario); ?> 
-                <span id="user-role"><?php echo !empty($role) ? "($role)" : ''; ?></span>
-            </p>
-            <p id="fechaHora" class="text-white text-sm sm:text-lg text-shadow">
-                <strong>Fecha/Hora Ingreso:</strong> Cargando...
-            </p>
-        </div>
-
-
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            function actualizarFechaHora() {
-                const ahora = new Date();
-                const fechaHoraFormateada = ahora.toLocaleString('es-ES', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                    hour12: false
-                });
-                const fechaHoraElemento = document.getElementById("fechaHora");
-                if (fechaHoraElemento) {
-                    fechaHoraElemento.textContent = `Fecha/Hora Ingreso: ${fechaHoraFormateada}`;
-                }
-            }
-            actualizarFechaHora();
-            setInterval(actualizarFechaHora, 1000);
-        });
-    </script>
 </body>
 </html>
