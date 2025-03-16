@@ -1,7 +1,7 @@
 <?php
 require_once("../conexion.php"); // Asegúrate de que este archivo exista y tenga la conexión correcta.
 
-$sql = "SELECT id_h, nombre_herramientas, cantidad_herramientas, emp, est_h, utl_herramientas, ubi_herramientas, ingr_at FROM tbl_herramientas";
+$sql = "SELECT id_herramientas, nombre_herramientas, cantidad_herramientas, id_empresa, estado_herramientas, utilidad_herramientas, ubicacion_herramientas, fecha_ingreso FROM tbl_herramientas";
 $result = $conn->query($sql);
 ?>
 
@@ -49,16 +49,16 @@ $result = $conn->query($sql);
             <tbody>
                 <?php while ($row = $result->fetch_assoc()): ?>
                 <tr>
-                    <td><?php echo $row['id_h']; ?></td>
+                    <td><?php echo $row['id_herramientas']; ?></td>
                     <td><?php echo $row['nombre_herramientas']; ?></td>
                     <td><?php echo $row['cantidad_herramientas']; ?></td>
-                    <td><?php echo $row['emp']; ?></td>
-                    <td><?php echo $row['est_h']; ?></td>
-                    <td><?php echo $row['utl_herramientas']; ?></td>
-                    <td><?php echo $row['ubi_herramientas']; ?></td>
-                    <td><?php echo $row['ingr_at']; ?></td>
+                    <td><?php echo $row['id_empresa']; ?></td>
+                    <td><?php echo $row['estado_herramientas']; ?></td>
+                    <td><?php echo $row['utilidad_herramientas']; ?></td>
+                    <td><?php echo $row['ubicacion_herramientas']; ?></td>
+                    <td><?php echo $row['fecha_ingreso']; ?></td>
                     <td>
-                        <a href="editar.php?id=<?php echo $row['id_h']; ?>">
+                        <a href="editar.php?id=<?php echo $row['id_herramientas']; ?>">
                             <button class="editBtn">Editar</button>
                         </a>
                     </td>

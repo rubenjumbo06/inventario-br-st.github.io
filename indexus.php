@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['id']) || $_SESSION['role'] !== 'admin') {
+if (!isset($_SESSION['id']) || $_SESSION['role'] !== 'user') {
     header('Location: login.php');
     exit;
 }
@@ -10,7 +10,7 @@ if (!isset($_SESSION['id']) || $_SESSION['role'] !== 'admin') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Control - Administrador</title>
+    <title>Panel de Control - Usuario</title>
     <style>
         /* Estilos adicionales para el info-box */
         .info-box {
@@ -23,7 +23,7 @@ if (!isset($_SESSION['id']) || $_SESSION['role'] !== 'admin') {
             background: #18919A;
             color: white;
             padding: 20px;
-            text-align: left;
+            text-align: center;
             font-size: 16px;
             display: none; /* Oculto por defecto */
             z-index: 10;
@@ -59,7 +59,7 @@ if (!isset($_SESSION['id']) || $_SESSION['role'] !== 'admin') {
         </div>
 
     <div class="px-4 sm:px-10 md:px-20 lg:px-60">
-        <div class="mt-10">
+        <div class="mt-20 lg:mt-24">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
                 <div class="button-container bg-white p-6 rounded-lg shadow-md flex flex-col justify-center text-center">
                     <!-- Enlace envolviendo todo el contenido -->
@@ -71,7 +71,7 @@ if (!isset($_SESSION['id']) || $_SESSION['role'] !== 'admin') {
 
                         <!-- Info Box -->
                         <div id="infoBox1" class="info-box">
-                            <p>Información del Perfil de Usuario.</p>
+                            <p>Información de las Herramientas existentes en almacen.</p>
                         </div>
                     </a>
 
@@ -87,7 +87,7 @@ if (!isset($_SESSION['id']) || $_SESSION['role'] !== 'admin') {
 
                         <!-- Info Box -->
                         <div id="infoBox1" class="info-box">
-                            <p>Información del Perfil de Usuario.</p>
+                            <p>Información de los Activos existentes en almacen.</p>
                         </div>
                     </a>
                 </div>
@@ -102,7 +102,7 @@ if (!isset($_SESSION['id']) || $_SESSION['role'] !== 'admin') {
 
                         <!-- Info Box -->
                         <div id="infoBox1" class="info-box">
-                            <p>Información del Perfil de Usuario.</p>
+                            <p>Información de los Consumibles existentes en almacen.</p>
                         </div>
                     </a>
                 </div>
@@ -117,7 +117,7 @@ if (!isset($_SESSION['id']) || $_SESSION['role'] !== 'admin') {
 
                         <!-- Info Box -->
                         <div id="infoBox1" class="info-box">
-                            <p>Información del Perfil de Usuario.</p>
+                            <p>Información Personal del Usuario.</p>
                         </div>
                     </a>
                 </div>

@@ -1,7 +1,7 @@
 <?php
 require_once("../conexion.php"); // Asegúrate de que este archivo exista y tenga la conexión correcta.
 
-$sql = "SELECT id_utilidad, nombre_utilidad, descripcion   FROM tbl_utilidad";
+$sql = "SELECT id_entradas, fecha_creacion, items, titulo, body, id_user FROM tbl_reg_entradas";
 $result = $conn->query($sql);
 ?>
 
@@ -10,7 +10,7 @@ $result = $conn->query($sql);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tabla de Utilidad</title>
+    <title>Tabla de Entradas</title>
     <link rel="stylesheet" href="../assets/CSS/tables.css"> <!-- Archivo CSS separado -->
 </head>
 <body class="bg-[var(--beige)]">
@@ -29,26 +29,32 @@ $result = $conn->query($sql);
 
     <main class="container">
         <strong>
-        <h1 class="title text-shadow">Tabla de Utilidad</h1>    
+        <h1 class="title text-shadow">Tabla de Entradas</h1>    
         </strong>
 
         <table>
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Descripción</th>
+                    <th>Fecha Creación</th>
+                    <th>Items</th>
+                    <th>Titulo</th>
+                    <th>Cuerpo</th>
+                    <th>Id User</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 <?php while ($row = $result->fetch_assoc()): ?>
                 <tr>
-                    <td><?php echo $row['id_utilidad']; ?></td>
-                    <td><?php echo $row['nombre_utilidad']; ?></td>
-                    <td><?php echo $row['descripcion']; ?></td>
+                    <td><?php echo $row['id_entradas']; ?></td>
+                    <td><?php echo $row['fecha_creacion']; ?></td>
+                    <td><?php echo $row['items']; ?></td>
+                    <td><?php echo $row['titulo']; ?></td>
+                    <td><?php echo $row['body']; ?></td>
+                    <td><?php echo $row['id_user']; ?></td>
                     <td>
-                        <a href="editar.php?id=<?php echo $row['id_utilidad']; ?>">
+                        <a href="editar.php?id=<?php echo $row['id_entradas']; ?>">
                             <button class="editBtn">Editar</button>
                         </a>
                     </td>

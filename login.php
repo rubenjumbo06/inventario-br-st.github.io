@@ -16,18 +16,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Por favor, completa todos los campos.';
     } else {
         // Consultar la base de datos para verificar el usuario
-        $query = "SELECT id, username, password, role FROM tbl_users WHERE username = ?";
+        $query = "SELECT id_user, username, password, role FROM tbl_users WHERE username = ?";
         $stmt = $conn->prepare($query);
         $stmt->bind_param('s', $username);
+
         $stmt->execute();
         $result = $stmt->get_result();
+        
 
         // Obtener el usuario
         if ($user = $result->fetch_assoc()) {
             // Verificar la contraseña
             if (password_verify($password, $user['password'])) {
                 session_start();
-                $_SESSION['id'] = $user['id'];
+                $_SESSION['id_user'] = $user['id_user'];
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['role'] = $user['role'];
 

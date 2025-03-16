@@ -1,7 +1,7 @@
 <?php
 require_once("../conexion.php"); // Asegúrate de que este archivo exista y tenga la conexión correcta.
 
-$sql = "SELECT id_empresa, nombre, ruc, servicio_emp FROM tbl_empresa";
+$sql = "SELECT id_empresa, nombre, ruc, servicio_empresa FROM tbl_empresa";
 $result = $conn->query($sql);
 ?>
 
@@ -48,7 +48,7 @@ $result = $conn->query($sql);
                     <td><?php echo $row['id_empresa']; ?></td>
                     <td><?php echo $row['nombre']; ?></td>
                     <td><?php echo $row['ruc']; ?></td>
-                    <td><?php echo $row['servicio_emp']; ?></td>
+                    <td><?php echo $row['servicio_empresa']; ?></td>
                     <td>
                         <a href="editar.php?id=<?php echo $row['id_empresa']; ?>">
                             <button class="editBtn">Editar</button>
@@ -60,7 +60,7 @@ $result = $conn->query($sql);
         </table>
 
         <div class="centered-button">
-            <a href="agregar.php">
+            <a href="agregaremp.php">
                 <button id="addBtn">Agregar Nuevo</button>
             </a>
         </div>

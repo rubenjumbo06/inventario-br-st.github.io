@@ -1,7 +1,8 @@
+
 <?php
 require_once("../conexion.php"); // Asegúrate de que este archivo exista y tenga la conexión correcta.
 
-$sql = "SELECT id_co, nm_co, cant_co, emp, est_co, utl_co, ubi_co, ingr_at, id_tecnico FROM tbl_co";
+$sql = "SELECT id_consumibles, nombre_consumibles, cantidad_consumibles, id_empresa, estado_consumibles, utilidad_consumibles, fecha_ingreso, id_tecnico FROM tbl_consumibles";
 $result = $conn->query($sql);
 ?>
 
@@ -41,26 +42,24 @@ $result = $conn->query($sql);
                     <th>Empresa</th>
                     <th>Estado</th>
                     <th>Utilidad</th>
-                    <th>Ubicación</th>
                     <th>Fecha Ingreso</th>
-                    <th>Id Técnico</th>
+                    <th>Técnico</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 <?php while ($row = $result->fetch_assoc()): ?>
                 <tr>
-                    <td><?php echo $row['id_co']; ?></td>
-                    <td><?php echo $row['nm_co']; ?></td>
-                    <td><?php echo $row['cant_co']; ?></td>
-                    <td><?php echo $row['emp']; ?></td>
-                    <td><?php echo $row['est_co']; ?></td>
-                    <td><?php echo $row['utl_co']; ?></td>
-                    <td><?php echo $row['ubi_co']; ?></td>
-                    <td><?php echo $row['ingr_at']; ?></td>
+                    <td><?php echo $row['id_consumibles']; ?></td>
+                    <td><?php echo $row['nombre_consumibles']; ?></td>
+                    <td><?php echo $row['cantidad_consumibles']; ?></td>
+                    <td><?php echo $row['id_empresa']; ?></td>
+                    <td><?php echo $row['estado_consumibles']; ?></td>
+                    <td><?php echo $row['utilidad_consumibles']; ?></td>
+                    <td><?php echo $row['fecha_ingreso']; ?></td>
                     <td><?php echo $row['id_tecnico']; ?></td>
                     <td>
-                        <a href="editar.php?id=<?php echo $row['id_co']; ?>">
+                        <a href="editar.php?id=<?php echo $row['id_consumibles']; ?>">
                             <button class="editBtn">Editar</button>
                         </a>
                     </td>

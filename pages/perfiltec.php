@@ -17,7 +17,7 @@
                 <img src="../assets/img/p3.jpeg" alt="Profile Picture" class="rounded-full w-48 h-48 mx-auto mb-2 border-4 border-[#22694c] dark:border-[#22694c] transition-transform duration-300 hover:scale-95">
                 <h1 class="text-2xl font-bold text-[#22694c] dark:text-[#22694c] mb-2">Rolando Dominguez</h1>
                 <p class="text-gray-600 dark:text-gray-300">Técnico</p>
-                <a href="editprofile"><button class="mt-4 bg-[#22694c] text-white px-4 py-2 rounded-lg hover:bg-[#7ab351] transition-colors duration-300 cursor-pointer">Editar Perfil</button></a>
+                <a href="editprofiletec.php"><button class="mt-4 bg-[#22694c] text-white px-4 py-2 rounded-lg hover:bg-[#7ab351] transition-colors duration-300 cursor-pointer">Editar Perfil</button></a>
             </div>
             <div class="md:w-2/3 md:pl-8">
                 <h2 class="text-xl font-semibold text-[#22694c] dark:text-[#22694c] mb-4">Permisos de Usuario</h2>
@@ -57,7 +57,7 @@
     </div>
 
     <!-- Botón flotante para regresar a la pantalla principal -->
-    <a href="/" class="fixed bottom-6 right-6 bg-[#22694c] text-white p-3 rounded-full shadow-lg hover:bg-[#7ab351] transition duration-300">
+    <a href="../indextec.php" class="fixed bottom-6 right-6 bg-[#22694c] text-white p-3 rounded-full shadow-lg hover:bg-[#7ab351] transition duration-300">
         <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
             <path stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
         </svg>

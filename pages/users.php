@@ -1,7 +1,7 @@
 <?php
 require_once("../conexion.php"); // Asegúrate de que este archivo exista y tenga la conexión correcta.
 
-$sql = "SELECT id, username, password, role, create_at, fecha_modificacion FROM tbl_users";
+$sql = "SELECT id_user, nombre, apellidos, username, password, role, correo, telefono, fecha_creacion, fecha_modificacion FROM tbl_users";
 $result = $conn->query($sql);
 ?>
 
@@ -36,9 +36,13 @@ $result = $conn->query($sql);
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Nombre Usuario</th>
+                    <th>Nombre</th>
+                    <th>Apellidos</th>
+                    <th>Usuario</th>
                     <th>Contraseña</th>
                     <th>Rol</th>
+                    <th>Correo</th>
+                    <th>Teléfono</th>
                     <th>Fecha Creación</th>
                     <th>Fecha Modificación</th>
                     <th>Acciones</th>
@@ -47,14 +51,18 @@ $result = $conn->query($sql);
             <tbody>
                 <?php while ($row = $result->fetch_assoc()): ?>
                 <tr>
-                    <td><?php echo $row['id']; ?></td>
+                    <td><?php echo $row['id_user']; ?></td>
+                    <td><?php echo $row['nombre']; ?></td>
+                    <td><?php echo $row['apellidos']; ?></td>
                     <td><?php echo $row['username']; ?></td>
                     <td><?php echo $row['password']; ?></td>
                     <td><?php echo $row['role']; ?></td>
-                    <td><?php echo $row['create_at']; ?></td>
+                    <td><?php echo $row['correo']; ?></td>
+                    <td><?php echo $row['telefono']; ?></td>
+                    <td><?php echo $row['fecha_creacion']; ?></td>
                     <td><?php echo $row['fecha_modificacion']; ?></td>
                     <td>
-                        <a href="editar.php?id=<?php echo $row['id']; ?>">
+                        <a href="editar.php?id=<?php echo $row['id_user']; ?>">
                             <button class="editBtn">Editar</button>
                         </a>
                     </td>

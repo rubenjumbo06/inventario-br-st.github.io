@@ -1,24 +1,48 @@
 <?php
-// Obtener el parámetro 'tabla' de la URL
-$tabla = isset($_GET['tabla']) ? htmlspecialchars($_GET['tabla']) : "Sin especificar";
+include '../conexion.php';
 
 // Inicializar variables del formulario
-$nombre = $cantidad = $empresa = $estado = $utilidad = $ubicacion = "";
+$nombre = $cantidad_consumibles = $id_empresa = $estado_consumibles = $utilidad_consumibles = $id_tecnico = "";
 $mensaje = "";
 
 // Procesar el formulario cuando se envíe
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Recoger los datos del formulario
-    $nombre = htmlspecialchars($_POST['nombre']);
-    $cantidad = htmlspecialchars($_POST['cantidad']);
-    $empresa = htmlspecialchars($_POST['empresa']);
-    $estado = htmlspecialchars($_POST['estado']);
-    $utilidad = htmlspecialchars($_POST['utilidad']);
-    $ubicacion = htmlspecialchars($_POST['ubicacion']);
+    // Recoger los datos del formulario y sanitizar
+    $nombre_consumibles = htmlspecialchars($_POST['nombre_consumibles']);
+    $cantidad_consumibles = htmlspecialchars($_POST['cantidad_consumibles']);
+    $id_empresa = htmlspecialchars($_POST['id_empresa']);
+    $estado_consumibles = htmlspecialchars($_POST['estado_consumibles']);
+    $utilidad_consumibles = htmlspecialchars($_POST['utilidad_consumibles']);
+    $id_tecnico = htmlspecialchars($_POST['id_tecnico']);
 
-    // Aquí podrías agregar lógica para guardar los datos en una base de datos
-    // Por ahora, simplemente mostraremos un mensaje de éxito
-    $mensaje = "¡Datos guardados correctamente!";
+    // Validar que los campos no estén vacíos
+    if (!empty($nombre_consumibles) && !empty($cantidad_consumibles) && !empty($id_empresa) && !empty($estado_consumibles) && !empty($utilidad_consumibles) && !empty($id_tecnico)) {
+        // Nombre fijo de la tabla
+        $tabla = "tbl_consumibles";
+
+        // Preparar la consulta SQL para insertar datos
+        $sql = "INSERT INTO $tabla (nombre_consumibles, cantidad_consumibles, id_empresa, estado_consumibles, utilidad_consumibles, id_tecnico) VALUES (?, ?, ?, ?, ?, ?)";
+
+        // Preparar la sentencia
+        if ($stmt = $conn->prepare($sql)) {
+            // Enlazar los parámetros
+            $stmt->bind_param("ssssss", $nombre_consumibles, $cantidad_consumibles, $id_empresa, $estado_consumibles, $utilidad_consumibles, $id_tecnico);
+
+            // Ejecutar la consulta
+            if ($stmt->execute()) {
+                $mensaje = "¡Datos guardados correctamente!";
+            } else {
+                $mensaje = "Error al guardar los datos: " . $stmt->error;
+            }
+
+            // Cerrar la sentencia
+            $stmt->close();
+        } else {
+            $mensaje = "Error al preparar la consulta: " . $conn->error;
+        }
+    } else {
+        $mensaje = "Todos los campos son obligatorios.";
+    }
 }
 ?>
 
@@ -27,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Datos</title>
+    <title>Agregar Datos</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../assets/CSS/agg.css">
@@ -41,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <div class="text-base text-[var(--verde-oscuro)]">Agregar Datos</div>
                     </strong>
                     <div class="mt-2 text-sm text-[var(--verde-oscuro)]">
-                        Editando tabla: <?php echo $tabla; ?>
+                        Editando tabla: Consumibles
                     </div>
                 </div>
             </div>
@@ -51,11 +75,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="mb-10 text-green-500"><?php echo $mensaje; ?></div>
         <?php endif; ?>
 
-        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) . "?tabla=" . urlencode($tabla); ?>">
+        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+
             <div class="grid grid-cols-2 gap-6 mb-10">
                 <!-- Nombre -->
                 <div id="input" class="relative">
-                    <input type="text" id="nombre" name="nombre"
+                    <input type="text" id="nombre_consumibles" name="nombre_consumibles"
                         class="block w-full text-sm h-[50px] px-4 text-slate-900 bg-white rounded-[8px] border border-violet-200 appearance-none focus:border-transparent focus:outline focus:outline-primary focus:ring-0 hover:border-brand-500-secondary peer invalid:border-error-500 invalid:focus:border-error-500 overflow-ellipsis overflow-hidden text-nowrap pr-[48px]"
                         placeholder="Nombre" value="<?php echo $nombre; ?>" required />
                     <label for="nombre"
@@ -66,9 +91,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <!-- Cantidad -->
                 <div id="input" class="relative">
-                    <input type="number" id="cantidad" name="cantidad"
+                    <input type="number" id="cantidad_consumibles" name="cantidad_consumibles"
                         class="block w-full text-sm h-[50px] px-4 text-slate-900 bg-white rounded-[8px] border border-violet-200 appearance-none focus:border-transparent focus:outline focus:outline-primary focus:ring-0 hover:border-brand-500-secondary peer invalid:border-error-500 invalid:focus:border-error-500 overflow-ellipsis overflow-hidden text-nowrap pr-[48px]"
-                        placeholder="Cantidad" value="<?php echo $cantidad; ?>" required />
+                        placeholder="Cantidad" value="<?php echo $cantidad_consumibles; ?>" required />
                     <label for="cantidad"
                         class="peer-placeholder-shown:-z-10 peer-focus:z-10 absolute text-[14px] leading-[150%] text-primary peer-focus:text-primary peer-invalid:text-error-500 focus:invalid:text-error-500 duration-300 transform -translate-y-[1.2rem] scale-75 top-2 z-10 origin-[0] bg-white disabled:bg-gray-50-background- px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-[1.2rem] rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">
                         Cantidad
@@ -77,13 +102,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <!-- Empresa -->
                 <div id="input" class="relative">
-                    <select id="empresa" name="empresa"
-                        class="block w-full text-sm h-[50px] px-4 text-slate-900 bg-white rounded-[8px] border border-violet-200 appearance-none focus:border-transparent focus:outline focus:outline-primary focus:ring-0 hover:border-brand-500-secondary peer invalid:border-error-500 invalid:focus:border-error-500 overflow-hidden pr-[48px]" required>
-                        <option value="" disabled <?php if ($empresa == "") echo "selected"; ?>>Selecciona una empresa</option>
-                        <option value="BARUC" <?php if ($empresa == "BARUC") echo "selected"; ?>>BARUC</option>
-                        <option value="STARNET" <?php if ($empresa == "STARNET") echo "selected"; ?>>STARNET</option>
+                    <select id="floating_outlined"
+                        class="block w-full text-sm h-[50px] px-4 text-slate-900 bg-white rounded-[8px] border border-violet-200 appearance-none focus:border-transparent focus:outline focus:outline-primary focus:ring-0 hover:border-brand-500-secondary peer invalid:border-error-500 invalid:focus:border-error-500 overflow-hidden pr-[48px]">
+                        <option value="" disabled selected>Selecciona una Empresa</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
                     </select>
-                    <label for="empresa"
+                    <label
+                        for="floating_outlined"
                         class="absolute text-[14px] leading-[150%] text-primary peer-focus:text-primary peer-invalid:text-error-500 focus:invalid:text-error-500 duration-300 transform -translate-y-[1.2rem] scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-[1.2rem] start-1">
                         Empresa
                     </label>
@@ -91,13 +117,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <!-- Estado -->
                 <div id="input" class="relative">
-                    <select id="estado" name="estado"
-                        class="block w-full text-sm h-[50px] px-4 text-slate-900 bg-white rounded-[8px] border border-violet-200 appearance-none focus:border-transparent focus:outline focus:outline-primary focus:ring-0 hover:border-brand-500-secondary peer invalid:border-error-500 invalid:focus:border-error-500 overflow-hidden pr-[48px]" required>
-                        <option value="" disabled <?php if ($estado == "") echo "selected"; ?>>Selecciona un estado</option>
-                        <option value="Activo" <?php if ($estado == "Activo") echo "selected"; ?>>Activo</option>
-                        <option value="Inactivo" <?php if ($estado == "Inactivo") echo "selected"; ?>>Inactivo</option>
+                    <select id="floating_outlined"
+                        class="block w-full text-sm h-[50px] px-4 text-slate-900 bg-white rounded-[8px] border border-violet-200 appearance-none focus:border-transparent focus:outline focus:outline-primary focus:ring-0 hover:border-brand-500-secondary peer invalid:border-error-500 invalid:focus:border-error-500 overflow-hidden pr-[48px]">
+                        <option value="" disabled selected>Selecciona un Estado</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
                     </select>
-                    <label for="estado"
+                    <label
+                        for="floating_outlined"
                         class="absolute text-[14px] leading-[150%] text-primary peer-focus:text-primary peer-invalid:text-error-500 focus:invalid:text-error-500 duration-300 transform -translate-y-[1.2rem] scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-[1.2rem] start-1">
                         Estado
                     </label>
@@ -105,31 +132,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <!-- Utilidad -->
                 <div id="input" class="relative">
-                    <select id="utilidad" name="utilidad"
-                        class="block w-full text-sm h-[50px] px-4 text-slate-900 bg-white rounded-[8px] border border-violet-200 appearance-none focus:border-transparent focus:outline focus:outline-primary focus:ring-0 hover:border-brand-500-secondary peer invalid:border-error-500 invalid:focus:border-error-500 overflow-hidden pr-[48px]" required>
-                        <option value="" disabled <?php if ($utilidad == "") echo "selected"; ?>>Selecciona una utilidad</option>
-                        <option value="General" <?php if ($utilidad == "General") echo "selected"; ?>>General</option>
-                        <option value="Específico" <?php if ($utilidad == "Específico") echo "selected"; ?>>Específico</option>
+                    <select id="floating_outlined"
+                        class="block w-full text-sm h-[50px] px-4 text-slate-900 bg-white rounded-[8px] border border-violet-200 appearance-none focus:border-transparent focus:outline focus:outline-primary focus:ring-0 hover:border-brand-500-secondary peer invalid:border-error-500 invalid:focus:border-error-500 overflow-hidden pr-[48px]">
+                        <option value="" disabled selected>Selecciona un Utilidad</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
                     </select>
-                    <label for="utilidad"
+                    <label
+                        for="floating_outlined"
                         class="absolute text-[14px] leading-[150%] text-primary peer-focus:text-primary peer-invalid:text-error-500 focus:invalid:text-error-500 duration-300 transform -translate-y-[1.2rem] scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-[1.2rem] start-1">
                         Utilidad
                     </label>
                 </div>
 
-                <!-- Ubicación -->
+                <!-- Tecnico -->
                 <div id="input" class="relative">
-                    <select id="ubicacion" name="ubicacion"
-                        class="block w-full text-sm h-[50px] px-4 text-slate-900 bg-white rounded-[8px] border border-violet-200 appearance-none focus:border-transparent focus:outline focus:outline-primary focus:ring-0 hover:border-brand-500-secondary peer invalid:border-error-500 invalid:focus:border-error-500 overflow-hidden pr-[48px]" required>
-                        <option value="" disabled <?php if ($ubicacion == "") echo "selected"; ?>>Selecciona la ubicación</option>
-                        <option value="Campo" <?php if ($ubicacion == "Campo") echo "selected"; ?>>Campo</option>
-                        <option value="Almacén" <?php if ($ubicacion == "Almacén") echo "selected"; ?>>Almacén</option>
+                    <select id="floating_outlined"
+                        class="block w-full text-sm h-[50px] px-4 text-slate-900 bg-white rounded-[8px] border border-violet-200 appearance-none focus:border-transparent focus:outline focus:outline-primary focus:ring-0 hover:border-brand-500-secondary peer invalid:border-error-500 invalid:focus:border-error-500 overflow-hidden pr-[48px]">
+                        <option value="" disabled selected>Selecciona un Tecnico</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
                     </select>
-                    <label for="ubicacion"
+                    <label
+                        for="floating_outlined"
                         class="absolute text-[14px] leading-[150%] text-primary peer-focus:text-primary peer-invalid:text-error-500 focus:invalid:text-error-500 duration-300 transform -translate-y-[1.2rem] scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-[1.2rem] start-1">
-                        Ubicación
+                        Tecnico
                     </label>
                 </div>
+
             </div>
 
             <div class="sm:flex sm:flex-row-reverse flex gap-4">
@@ -146,6 +176,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="flex gap-2 items-center">Cancelar</div>
                 </button>
             </div>
+
         </form>
     </div>
 </body>

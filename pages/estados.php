@@ -1,7 +1,7 @@
 <?php
 require_once("../conexion.php"); // Asegúrate de que este archivo exista y tenga la conexión correcta.
 
-$sql = "SELECT id_estado, nombre, descrip   FROM tbl_estados";
+$sql = "SELECT id_estado, nombre_estado, descripcion   FROM tbl_estados";
 $result = $conn->query($sql);
 ?>
 
@@ -45,8 +45,8 @@ $result = $conn->query($sql);
                 <?php while ($row = $result->fetch_assoc()): ?>
                 <tr>
                     <td><?php echo $row['id_estado']; ?></td>
-                    <td><?php echo $row['nombre']; ?></td>
-                    <td><?php echo $row['descrip']; ?></td>
+                    <td><?php echo $row['nombre_estado']; ?></td>
+                    <td><?php echo $row['descripcion']; ?></td>
                     <td>
                         <a href="editar.php?id=<?php echo $row['id_estado']; ?>">
                             <button class="editBtn">Editar</button>

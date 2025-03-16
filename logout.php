@@ -1,6 +1,13 @@
 <?php
 session_start();
  // Limpia las variables de sesión
+ // Verifica si el usuario ha iniciado sesión
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$username = $_SESSION['username'];
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -20,7 +27,7 @@ session_start();
                 <h1>CERRAR SESIÓN</h1>
                 <!-- Mensaje -->
                 <p>
-                    Hola Admin, ¿Estás seguro de cerrar sesión en<br>Inventario BARUC - STARNET?
+                    Hola  <?php echo htmlspecialchars($username); ?>,¿Estás seguro de cerrar sesión en<br>Inventario BARUC - STARNET?
                 </p>
                 <!-- Botones -->
                 <div class="button-container">

@@ -17,7 +17,7 @@
                 <img src="../assets/img/p1.jpeg" alt="Profile Picture" class="rounded-full w-48 h-48 mx-auto mb-2 border-4 border-[#22694c] dark:border-[#22694c] transition-transform duration-300 hover:scale-95">
                 <h1 class="text-2xl font-bold text-[#22694c] dark:text-[#22694c] mb-2">David Acedo</h1>
                 <p class="text-gray-600 dark:text-gray-300">Administrador</p>
-                <a href="editprofile"><button class="mt-4 bg-[#22694c] text-white px-4 py-2 rounded-lg hover:bg-[#7ab351] transition-colors duration-300 cursor-pointer">Editar Perfil</button></a>
+                <a href="editprofileus.php"><button class="mt-4 bg-[#22694c] text-white px-4 py-2 rounded-lg hover:bg-[#7ab351] transition-colors duration-300 cursor-pointer">Editar Perfil</button></a>
             </div>
             <div class="md:w-2/3 md:pl-8">
                 <h2 class="text-xl font-semibold text-[#22694c] dark:text-[#22694c] mb-4">Permisos de Usuario</h2>

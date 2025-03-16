@@ -35,7 +35,7 @@ $role = $_SESSION['role'] ?? '';
         <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-shadow">
             Inventario <span class="text-[var(--mostaza)]">BARUC - STARNET</span>
         </h2>
-        <a href="/logout.php">
+        <a href="logout.php">
             <button class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-800 transition cursor-pointer text-sm sm:text-base">
                 Log Out
             </button>

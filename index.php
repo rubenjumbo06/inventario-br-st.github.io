@@ -1,9 +1,13 @@
 <?php
 session_start();
-if (!isset($_SESSION['id']) || $_SESSION['role'] !== 'admin') {
+if (!isset($_SESSION['id_user']) || $_SESSION['role'] !== 'admin') {
     header('Location: login.php');
     exit;
 }
+
+// Recuperar datos de sesión para evitar el error
+$user = $_SESSION['username'] ?? 'Usuario Desconocido'; 
+$role = $_SESSION['role'] ?? '';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -23,7 +27,7 @@ if (!isset($_SESSION['id']) || $_SESSION['role'] !== 'admin') {
             background: #18919A;
             color: white;
             padding: 20px;
-            text-align: left;
+            text-align: center;
             font-size: 16px;
             display: none; /* Oculto por defecto */
             z-index: 10;
@@ -50,7 +54,7 @@ if (!isset($_SESSION['id']) || $_SESSION['role'] !== 'admin') {
 
         <div class="flex justify-between items-center mt-4 px-4">
             <p class="text-white text-sm sm:text-lg text-shadow">
-                <strong>User:</strong> <?php echo htmlspecialchars($usuario); ?> 
+                <strong>User:</strong> <?php echo htmlspecialchars($user); ?> 
                 <span id="user-role"><?php echo !empty($role) ? "($role)" : ''; ?></span>
             </p>
             <p id="fechaHora" class="text-white text-sm sm:text-lg text-shadow">
@@ -71,7 +75,7 @@ if (!isset($_SESSION['id']) || $_SESSION['role'] !== 'admin') {
 
                         <!-- Info Box -->
                         <div id="infoBox1" class="info-box">
-                            <p>Información del Perfil de Usuario.</p>
+                            <p>Información de las Herramientas existentes en almacen.</p>
                         </div>
                     </a>
 
@@ -87,7 +91,7 @@ if (!isset($_SESSION['id']) || $_SESSION['role'] !== 'admin') {
 
                         <!-- Info Box -->
                         <div id="infoBox1" class="info-box">
-                            <p>Información del Perfil de Usuario.</p>
+                            <p>Información de los Activos existentes en almacen.</p>
                         </div>
                     </a>
                 </div>
@@ -102,7 +106,7 @@ if (!isset($_SESSION['id']) || $_SESSION['role'] !== 'admin') {
 
                         <!-- Info Box -->
                         <div id="infoBox1" class="info-box">
-                            <p>Información del Perfil de Usuario.</p>
+                            <p>Información de los Consumibles existentes en almacen.</p>
                         </div>
                     </a>
                 </div>
@@ -117,7 +121,7 @@ if (!isset($_SESSION['id']) || $_SESSION['role'] !== 'admin') {
 
                         <!-- Info Box -->
                         <div id="infoBox1" class="info-box">
-                            <p>Información del Perfil de Usuario.</p>
+                            <p>Información de las Utilidades existentes.</p>
                         </div>
                     </a>
                 </div>
@@ -132,7 +136,7 @@ if (!isset($_SESSION['id']) || $_SESSION['role'] !== 'admin') {
 
                         <!-- Info Box -->
                         <div id="infoBox1" class="info-box">
-                            <p>Información del Perfil de Usuario.</p>
+                            <p>Información de los Usuarios existentes.</p>
                         </div>
                     </a>
                 </div>
@@ -147,7 +151,7 @@ if (!isset($_SESSION['id']) || $_SESSION['role'] !== 'admin') {
 
                         <!-- Info Box -->
                         <div id="infoBox1" class="info-box">
-                            <p>Información del Perfil de Usuario.</p>
+                            <p>Información de las Empresas existentes.</p>
                         </div>
                     </a>
                 </div>
@@ -162,7 +166,7 @@ if (!isset($_SESSION['id']) || $_SESSION['role'] !== 'admin') {
 
                         <!-- Info Box -->
                         <div id="infoBox1" class="info-box">
-                            <p>Información del Perfil de Usuario.</p>
+                            <p>Información de los Estados existentes.</p>
                         </div>
                     </a>
                 </div>
@@ -177,22 +181,22 @@ if (!isset($_SESSION['id']) || $_SESSION['role'] !== 'admin') {
 
                         <!-- Info Box -->
                         <div id="infoBox1" class="info-box">
-                            <p>Información del Perfil de Usuario.</p>
+                            <p>Información de los Técnicos existentes.</p>
                         </div>
                     </a>
                 </div>
 
                 <div class="button-container bg-white p-6 rounded-lg shadow-md flex flex-col items-center justify-center text-center">
                     <!-- Enlace envolviendo todo el contenido -->
-                    <a href="pages/salidas.php" class="block w-full h-full text-center cursor-pointer flex flex-col items-center">
-                        <img src="assets/img/salidas.png" alt="Perfil Usuario" class="w-16 h-16 object-contain mb-4">
+                    <a href="pages/perfilad.php" class="block w-full h-full text-center cursor-pointer flex flex-col items-center">
+                        <img src="assets/img/perfil.png" alt="Perfil Usuario" class="w-16 h-16 object-contain mb-4">
                         <span class="text-[var(--verde-claro)] font-semibold hover:text-[var(--verde-oscuro)] transition">
-                            Registro de salidas
+                            Perfil de Usuario
                         </span>
 
                         <!-- Info Box -->
                         <div id="infoBox1" class="info-box">
-                            <p>Información del Perfil de Usuario.</p>
+                            <p>Información Personal del Usuario.</p>
                         </div>
                     </a>
                 </div>
