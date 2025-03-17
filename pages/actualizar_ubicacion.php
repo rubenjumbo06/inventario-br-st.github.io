@@ -1,22 +1,39 @@
 <?php
-include '../conexion.php'; // Asegúrate de que la ruta sea correcta
+include '../conexion.php'; // Ajusta la ruta según la ubicación real
 $conexion = $conn;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id_h = $_POST['id_h'];
-    $ubi_herramientas = $_POST['ubi_herramientas']; // 'almacen' o 'campo'
+    $data = json_decode(file_get_contents('php://input'), true);
+    $id = $data['id'] ?? null;
+    $tipo = $data['tipo'] ?? null;
+    $ubicacion = $data['ubicacion'] ?? null;
 
-    $sql = "UPDATE tbl_herramientas SET ubi_herramientas = ? WHERE id_h = ?";
-    $stmt = $conexion->prepare($sql);
-    $stmt->bind_param("si", $ubi_herramientas, $id_h);
+    if ($tipo === 'herramienta' && $id !== null && $ubicacion !== null) {
+        $sql = "UPDATE tbl_herramientas SET ubicacion_herramientas = ? WHERE id_herramientas = ?";
+        $stmt = $conexion->prepare($sql);
+        $stmt->bind_param("si", $ubicacion, $id);
 
-    if ($stmt->execute()) {
-        echo "Ubicación actualizada correctamente.";
-    } else {
-        echo "Error al actualizar ubicación: " . $stmt->error;
+        if ($stmt->execute()) {
+            echo "Ubicación de herramientas actualizada.";
+        } else {
+            echo "Error en herramientas: " . $stmt->error;
+        }
+        $stmt->close();
     }
 
-    $stmt->close();
+    if ($tipo === 'activo' && $id !== null && $ubicacion !== null) {
+        $sql2 = "UPDATE tbl_activos SET ubicacion_activos = ? WHERE id_activos = ?";
+        $stmt2 = $conexion->prepare($sql2);
+        $stmt2->bind_param("si", $ubicacion, $id);
+
+        if ($stmt2->execute()) {
+            echo "Ubicación de activos actualizada.";
+        } else {
+            echo "Error en activos: " . $stmt2->error;
+        }
+        $stmt2->close();
+    }
+
     $conexion->close();
 }
 ?>
