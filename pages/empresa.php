@@ -50,7 +50,7 @@ $result = $conn->query($sql);
                     <td><?php echo $row['ruc']; ?></td>
                     <td><?php echo $row['servicio_empresa']; ?></td>
                     <td>
-                        <a href="editar.php?id=<?php echo $row['id_empresa']; ?>">
+                        <a href="../Uses/editaremp.php?id_empresa=<?php echo $row['id_empresa']; ?>">
                             <button class="editBtn">Editar</button>
                         </a>
                     </td>
@@ -60,7 +60,7 @@ $result = $conn->query($sql);
         </table>
 
         <div class="centered-button">
-            <a href="agregaremp.php">
+            <a href="../Uses/agregaremp.php">
                 <button id="addBtn">Agregar Nuevo</button>
             </a>
         </div>

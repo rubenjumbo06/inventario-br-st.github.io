@@ -48,7 +48,7 @@ $result = $conn->query($sql);
                     <td><?php echo $row['nombre_utilidad']; ?></td>
                     <td><?php echo $row['descripcion']; ?></td>
                     <td>
-                        <a href="editar.php?id=<?php echo $row['id_utilidad']; ?>">
+                        <a href="../Uses/editaruti.php?id_utilidad=<?php echo $row['id_utilidad']; ?>">
                             <button class="editBtn">Editar</button>
                         </a>
                     </td>
@@ -58,7 +58,7 @@ $result = $conn->query($sql);
         </table>
 
         <div class="centered-button">
-            <a href="agregar.php">
+            <a href="../Uses/agregaruti.php">
                 <button id="addBtn">Agregar Nuevo</button>
             </a>
         </div>

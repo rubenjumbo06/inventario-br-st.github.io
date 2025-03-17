@@ -1,6 +1,6 @@
 <?php
 // Contraseña original
-$password = 'miguel2024';
+$password = '123456';
 
 // Generar el hash
 $hash = password_hash($password, PASSWORD_DEFAULT);

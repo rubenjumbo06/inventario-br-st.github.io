@@ -2,7 +2,7 @@
 <?php
 require_once("../conexion.php"); // Asegúrate de que este archivo exista y tenga la conexión correcta.
 
-$sql = "SELECT id_consumibles, nombre_consumibles, cantidad_consumibles, id_empresa, estado_consumibles, utilidad_consumibles, fecha_ingreso, id_tecnico FROM tbl_consumibles";
+$sql = "SELECT id_consumibles, nombre_consumibles, cantidad_consumibles, id_empresa, estado_consumibles, utilidad_consumibles, fecha_ingreso, id_user FROM tbl_consumibles";
 $result = $conn->query($sql);
 ?>
 
@@ -43,7 +43,7 @@ $result = $conn->query($sql);
                     <th>Estado</th>
                     <th>Utilidad</th>
                     <th>Fecha Ingreso</th>
-                    <th>Técnico</th>
+                    <th>Usuario</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -57,9 +57,9 @@ $result = $conn->query($sql);
                     <td><?php echo $row['estado_consumibles']; ?></td>
                     <td><?php echo $row['utilidad_consumibles']; ?></td>
                     <td><?php echo $row['fecha_ingreso']; ?></td>
-                    <td><?php echo $row['id_tecnico']; ?></td>
+                    <td><?php echo $row['id_user']; ?></td>
                     <td>
-                        <a href="editar.php?id=<?php echo $row['id_consumibles']; ?>">
+                        <a href="../Uses/editarcon.php?id_consumibles=<?php echo $row['id_consumibles']; ?>">
                             <button class="editBtn">Editar</button>
                         </a>
                     </td>
@@ -69,7 +69,7 @@ $result = $conn->query($sql);
         </table>
 
         <div class="centered-button">
-            <a href="agregar.php">
+            <a href="../Uses/agregaract.php">
                 <button id="addBtn">Agregar Nuevo</button>
             </a>
         </div>
