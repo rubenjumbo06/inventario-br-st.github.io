@@ -78,7 +78,7 @@ if (!isset($_SESSION['id_user']) || $_SESSION['role'] !== 'tecnico') {
 
                 <div class="button-container bg-white p-6 rounded-lg shadow-md flex flex-col items-center justify-center text-center">
                     <!-- Enlace envolviendo todo el contenido -->
-                    <a href="pages/salidas.php" class="block w-full h-full text-center cursor-pointer flex flex-col items-center">
+                    <a href="pages/reg_salidas.php" class="block w-full h-full text-center cursor-pointer flex flex-col items-center">
                         <img src="assets/img/salidas.png" alt="Registro de Salidas" class="w-16 h-16 object-contain mb-4">
                         <span class="text-[var(--verde-claro)] font-semibold hover:text-[var(--verde-oscuro)] transition">
                             Registro de salidas
@@ -108,7 +108,7 @@ if (!isset($_SESSION['id_user']) || $_SESSION['role'] !== 'tecnico') {
 
                 <div class="button-container bg-white p-6 rounded-lg shadow-md flex flex-col items-center justify-center text-center">
                     <!-- Enlace envolviendo todo el contenido -->
-                    <a href="pages/salidas.php" class="block w-full h-full text-center cursor-pointer flex flex-col items-center">
+                    <a href="pages/reg_entradas.php" class="block w-full h-full text-center cursor-pointer flex flex-col items-center">
                         <img src="assets/img/entradas.png" alt="Registro de Entradas" class="w-16 h-16 object-contain mb-4">
                         <span class="text-[var(--verde-claro)] font-semibold hover:text-[var(--verde-oscuro)] transition">
                             Registro de Entradas

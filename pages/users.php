@@ -62,7 +62,7 @@ $result = $conn->query($sql);
                     <td><?php echo $row['fecha_creacion']; ?></td>
                     <td><?php echo $row['fecha_modificacion']; ?></td>
                     <td>
-                        <a href="editar.php?id=<?php echo $row['id_user']; ?>">
+                        <a href="../Uses/editarusers.php?id_user=<?php echo $row['id_user']; ?>">
                             <button class="editBtn">Editar</button>
                         </a>
                     </td>

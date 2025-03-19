@@ -48,7 +48,7 @@ $result = $conn->query($sql);
                     <td><?php echo $row['nombre_estado']; ?></td>
                     <td><?php echo $row['descripcion']; ?></td>
                     <td>
-                        <a href="editar.php?id=<?php echo $row['id_estado']; ?>">
+                        <a href="../Uses/editarest.php?id_estado=<?php echo $row['id_estado']; ?>">
                             <button class="editBtn">Editar</button>
                         </a>
                     </td>

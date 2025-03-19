@@ -54,7 +54,7 @@ $result = $conn->query($sql);
                     <td><?php echo $row['body']; ?></td>
                     <td><?php echo $row['id_user']; ?></td>
                     <td>
-                        <a href="editar.php?id=<?php echo $row['id_entradas']; ?>">
+                        <a href="../Uses/editarent.php?id_entradas=<?php echo $row['id_entradas']; ?>">
                             <button class="editBtn">Editar</button>
                         </a>
                     </td>

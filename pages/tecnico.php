@@ -52,7 +52,7 @@ $result = $conn->query($sql);
                     <td><?php echo $row['edad_tecnico']; ?></td>
                     <td><?php echo $row['num_telef']; ?></td>
                     <td>
-                        <a href="editar.php?id=<?php echo $row['id_tecnico']; ?>">
+                        <a href="../Uses/editartec.php?id_tecnico=<?php echo $row['id_tecnico']; ?>">
                             <button class="editBtn">Editar</button>
                         </a>
                     </td>

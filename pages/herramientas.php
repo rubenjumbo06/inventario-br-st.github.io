@@ -58,7 +58,7 @@ $result = $conn->query($sql);
                     <td><?php echo $row['ubicacion_herramientas']; ?></td>
                     <td><?php echo $row['fecha_ingreso']; ?></td>
                     <td>
-                        <a href="editar.php?id=<?php echo $row['id_herramientas']; ?>">
+                        <a href="../Uses/editarherr.php?id_herramientas=<?php echo $row['id_herramientas']; ?>">
                             <button class="editBtn">Editar</button>
                         </a>
                     </td>

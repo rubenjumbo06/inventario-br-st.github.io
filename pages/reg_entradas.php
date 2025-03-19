@@ -1,4 +1,12 @@
 <?php
+session_start(); // Iniciar la sesión
+if (!isset($_SESSION['id_user']) || $_SESSION['role'] !== 'tecnico') {
+    header('Location: ../login.php'); // Ajusta la ruta si es necesario
+    exit;
+}
+$usuario = isset($_SESSION['nombre']) ? $_SESSION['nombre'] : 'Usuario no definido'; // Obtener el nombre
+$role = $_SESSION['role']; // Obtener el rol
+
 include '../conexion.php'; // Ajusta la ruta según la ubicación real
 $conexion = $conn;
 
@@ -19,7 +27,7 @@ $usuarios = $conn->query("SELECT id_user, nombre FROM tbl_users");
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $titulo = $_POST['titulo'];
-    $id_user = $_POST['id_user'];
+    $id_user = $_POST['id_user']; // Usar el id del usuario seleccionado en el formulario
     $selectedItems = json_decode($_POST['body'], true);
     $totalItems = 0;
     $body = "";
@@ -33,7 +41,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $body .= "Herramientas: (" . implode(", ", $herramientas) . "), ";
         $totalItems += count($selectedItems['herramientas']);
 
-        // Actualizar ubicación de herramientas a 'En almacen'
         foreach ($selectedItems['herramientas'] as $id => $nombre) {
             $stmt = $conn->prepare("UPDATE tbl_herramientas SET ubicacion_herramientas = 'En almacen' WHERE id_herramientas = ?");
             $stmt->bind_param("i", $id);
@@ -50,7 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $body .= "Activos: (" . implode(", ", $activos) . "), ";
         $totalItems += count($selectedItems['activos']);
 
-        // Actualizar ubicación de activos a 'En almacen'
         foreach ($selectedItems['activos'] as $id => $nombre) {
             $stmt = $conn->prepare("UPDATE tbl_activos SET ubicacion_activos = 'En almacen' WHERE id_activos = ?");
             $stmt->bind_param("i", $id);
@@ -59,14 +65,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Procesar consumibles (sumar en lugar de restar)
+    // Procesar consumibles
     if (!empty($selectedItems['consumibles'])) {
         $consumibles = [];
         foreach ($selectedItems['consumibles'] as $id => $data) {
             $consumibles[] = $data['nombre'] . "(" . $data['cantidad'] . ")";
             $totalItems += $data['cantidad'];
 
-            // Sumar la cantidad de consumibles
             $cantidadSeleccionada = $data['cantidad'];
             $stmt = $conn->prepare("UPDATE tbl_consumibles SET cantidad_consumibles = cantidad_consumibles + ? WHERE id_consumibles = ?");
             $stmt->bind_param("ii", $cantidadSeleccionada, $id);
@@ -76,7 +81,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $body .= "Consumibles: [" . implode(", ", $consumibles) . "]";
     }
 
-    // Guardar en tbl_reg_entradas
     $stmt = $conn->prepare("INSERT INTO tbl_reg_entradas (fecha_creacion, items, titulo, body, id_user) VALUES (?, ?, ?, ?, ?)");
     $stmt->bind_param("sisss", $fecha_creacion, $totalItems, $titulo, $body, $id_user);
     $stmt->execute();
@@ -92,6 +96,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Entradas</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+    </style>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             let selectedItems = {
@@ -100,7 +109,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 consumibles: {}
             };
 
-            // Función para agregar/deseleccionar elementos
             window.agregarElemento = function (tipo, id, nombre, cantidad = null) {
                 let container = selectedItems[tipo];
                 if (cantidad !== null) {
@@ -111,24 +119,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 } else {
                     if (container[id]) {
-                        delete container[id]; // Deseleccionar
+                        delete container[id];
                     } else {
-                        container[id] = nombre; // Seleccionar
+                        container[id] = nombre;
                     }
                 }
                 actualizarResumen();
             };
 
-            // Función para validar y actualizar la cantidad de consumibles
             window.validarCantidad = function (id) {
                 let cantidadElemento = document.getElementById(`cantidad-${id}`);
                 let errorElemento = document.getElementById(`error-${id}`);
                 
-                if (!cantidadElemento || !errorElemento) return; // Validar que los elementos existan
+                if (!cantidadElemento || !errorElemento) return;
                 
                 let cantidadIngresada = parseInt(cantidadElemento.value) || 0;
 
-                // Asegurar que la cantidad no sea negativa
                 if (cantidadIngresada < 0) {
                     cantidadIngresada = 0;
                     errorElemento.textContent = "La cantidad no puede ser negativa";
@@ -137,52 +143,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 cantidadElemento.value = cantidadIngresada;
 
-                // Obtener el nombre del consumible
                 let nombreElemento = cantidadElemento.closest('li')?.querySelector('span');
                 let nombre = nombreElemento ? nombreElemento.textContent.split('(')[0].trim() : 'Desconocido';
 
-                // Agregar/actualizar el consumible en selectedItems
                 if (cantidadIngresada > 0) {
                     selectedItems.consumibles[id] = { nombre, cantidad: cantidadIngresada };
                 } else {
-                    delete selectedItems.consumibles[id]; // Eliminar si la cantidad es 0
+                    delete selectedItems.consumibles[id];
                 }
                 actualizarResumen();
             };
 
-            // Función para actualizar el resumen
             function actualizarResumen() {
                 let resumen = [];
                 let totalItems = 0;
 
-                // Procesar herramientas
                 if (Object.keys(selectedItems.herramientas).length > 0) {
                     let herramientas = Object.values(selectedItems.herramientas);
                     resumen.push("Herramientas: (" + herramientas.join(", ") + ")");
                     totalItems += herramientas.length;
                 }
 
-                // Procesar activos
                 if (Object.keys(selectedItems.activos).length > 0) {
                     let activos = Object.values(selectedItems.activos);
                     resumen.push("Activos: (" + activos.join(", ") + ")");
                     totalItems += activos.length;
                 }
 
-                // Procesar consumibles
                 if (Object.keys(selectedItems.consumibles).length > 0) {
                     let consumibles = Object.values(selectedItems.consumibles).map(item => `${item.nombre}(${item.cantidad})`);
                     resumen.push("Consumibles: [" + consumibles.join(", ") + "]");
                     totalItems += Object.values(selectedItems.consumibles).reduce((sum, item) => sum + item.cantidad, 0);
                 }
 
-                // Actualizar el resumen visual
                 document.getElementById('selectedList').innerHTML = resumen.map(item => `<li class="bg-gray-100 p-2 rounded-md mb-2">${item}</li>`).join('');
                 document.getElementById('bodyField').value = JSON.stringify(selectedItems);
                 document.getElementById('totalItems').textContent = totalItems;
             }
 
-            // Función para buscar herramientas
             function buscarHerramientas() {
                 let input = document.getElementById('searchHerramientas').value.toLowerCase();
                 document.querySelectorAll('.herramienta').forEach(herramienta => {
@@ -191,7 +189,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 });
             }
 
-            // Función para buscar activos
             function buscarActivos() {
                 let input = document.getElementById('searchActivos').value.toLowerCase();
                 document.querySelectorAll('.activo').forEach(activo => {
@@ -202,11 +199,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             document.getElementById("searchHerramientas").addEventListener("input", buscarHerramientas);
             document.getElementById("searchActivos").addEventListener("input", buscarActivos);
+
+            function actualizarFechaHora() {
+                const ahora = new Date();
+                const fechaHoraFormateada = ahora.toLocaleString('es-ES', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: false
+                });
+                const fechaHoraElemento = document.getElementById("fechaHora");
+                if (fechaHoraElemento) {
+                    fechaHoraElemento.textContent = `Fecha/Hora Ingreso: ${fechaHoraFormateada}`;
+                }
+            }
+            actualizarFechaHora();
+            setInterval(actualizarFechaHora, 1000);
         });
     </script>
 </head>
 <body class="bg-[var(--beige)] p-4">
     <?php include 'header.php'; ?>
+    <div class="flex justify-between items-center mt-4 px-4">
+        <p class="text-white text-sm sm:text-lg text-shadow">
+            <strong>User:</strong> <?php echo htmlspecialchars($usuario); ?> 
+            <span id="user-role"><?php echo !empty($role) ? "($role)" : ''; ?></span>
+        </p>
+        <p id="fechaHora" class="text-white text-sm sm:text-lg text-shadow">
+            <strong>Fecha/Hora Ingreso:</strong> Cargando...
+        </p>
+    </div>
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 p-4">
         <!-- Herramientas -->
         <div class="col-span-1 bg-white p-4 rounded-lg shadow-md">
