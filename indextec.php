@@ -4,6 +4,9 @@ if (!isset($_SESSION['id_user']) || $_SESSION['role'] !== 'tecnico') {
     header('Location: login.php');
     exit;
 }
+// Recuperar datos de sesión para evitar el error
+$user = $_SESSION['username'] ?? 'Usuario Desconocido'; 
+$role = $_SESSION['role'] ?? '';
 ?>
 <!DOCTYPE html>
 <html lang="es">

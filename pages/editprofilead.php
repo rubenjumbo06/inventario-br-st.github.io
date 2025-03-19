@@ -1,52 +1,39 @@
 <?php
 session_start();
 include '../conexion.php';
-
 if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
 }
-
-// Configuración inicial para manejar errores y encabezados
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-
-// Procesar el formulario cuando se envíe
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Recoger los datos del formulario y sanitizar
-    $id_user = $_SESSION['id_user']; // Se obtiene de la sesión
+    $id_user = $_SESSION['id_user'];
     $nombre = trim(htmlspecialchars($_POST['nombre']));
     $apellidos = trim(htmlspecialchars($_POST['apellidos']));
     $username = trim(htmlspecialchars($_POST['username']));
     $correo = trim(htmlspecialchars($_POST['correo']));
     $telefono = trim(htmlspecialchars($_POST['telefono']));
-    $password = $_POST['password']; // No se sanitiza aún porque se usará hash
+    $password = $_POST['password']; 
 
-    // Validaciones básicas
     if (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
         $mensaje = "El correo electrónico no es válido.";
     } elseif (!preg_match('/^[0-9]{9}$/', $telefono)) {
         $mensaje = "El número de teléfono debe tener 9 dígitos.";
     } elseif (!empty($id_user) && !empty($nombre) && !empty($apellidos) && !empty($username) && !empty($correo) && !empty($telefono)) {
-        // Preparar la consulta SQL para actualizar datos
         if (!empty($password)) {
-            // Si el usuario ingresa una nueva contraseña, la hasheamos
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
             $sql = "UPDATE tbl_users SET nombre = ?, apellidos = ?, username = ?, password = ?, correo = ?, telefono = ? WHERE id_user = ?";
             $params = [$nombre, $apellidos, $username, $hashed_password, $correo, $telefono, $id_user];
         } else {
-            // Si no ingresa nueva contraseña, no actualizamos ese campo
             $sql = "UPDATE tbl_users SET nombre = ?, apellidos = ?, username = ?, correo = ?, telefono = ? WHERE id_user = ?";
             $params = [$nombre, $apellidos, $username, $correo, $telefono, $id_user];
         }
 
-        // Preparar la sentencia
         if ($stmt = $conn->prepare($sql)) {
-            // Enlazar los parámetros dinámicamente
-            $types = str_repeat('s', count($params) - 1) . 'i'; // Tipos de datos para bind_param
+            $types = str_repeat('s', count($params) - 1) . 'i';
             $stmt->bind_param($types, ...$params);
 
-            // Ejecutar la consulta
             if ($stmt->execute()) {
                 $mensaje = "¡Datos actualizados correctamente!";
                 header("Location: perfilad.php"); 
@@ -54,8 +41,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } else {
                 $mensaje = "Error al actualizar los datos: " . $stmt->error;
             }
-
-            // Cerrar la sentencia
             $stmt->close();
         } else {
             $mensaje = "Error al preparar la consulta: " . $conn->error;
@@ -83,7 +68,6 @@ if ($result->num_rows > 0) {
     $apellidos = "Desconocido";
     $rol = "Sin rol";
 }
-
 $stmt->close();
 $conn->close();
 ?>
@@ -104,7 +88,6 @@ $conn->close();
         <div class="flex relative flex-col justify-center items-center bg-gray-100 h-[70px] w-[70px] rounded-[16px] overflow-hidden">
             <img src="../assets/img/p1.jpeg" alt="Editar Listas" class="w-full h-full object-cover">
         </div>
-        
         <div class="flex flex-col self-stretch my-auto min-w-[240px]">
             <strong>
                 <div class="text-base text-[var(--verde-oscuro)]"><?php echo htmlspecialchars($nombre . ' ' . $apellidos); ?></div>
@@ -115,11 +98,8 @@ $conn->close();
         </div>
     </div>
 </div>
-
         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-        
         <div class="grid grid-cols-2 gap-6 mb-10">
-
                 <!-- Campo Nombres -->
                 <div id="input" class="relative">
                     <input type="text" id="floating_outlined" name="nombre"
@@ -191,7 +171,7 @@ $conn->close();
                 <!-- Botón Guardar -->
                 <button type="submit"
                     class="w-fit rounded-lg text-sm px-6 py-3 h-[50px] border border-[var(--verde-oscuro)] bg-[var(--verde-claro)] text-white font-semibold shadow-md hover:bg-green-900 transition-all duration-300">
-                    <div class="flex gap-2 items-center">Guardar</div>
+                    <div class="flex gap-2 items-center">Actualizar</div>
                 </button>
 
                 <!-- Botón Cancelar -->
