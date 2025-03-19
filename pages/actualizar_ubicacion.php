@@ -1,18 +1,15 @@
 <?php
-include '../conexion.php'; // Ajusta la ruta según la ubicación real
+include '../conexion.php';
 $conexion = $conn;
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
     $id = $data['id'] ?? null;
     $tipo = $data['tipo'] ?? null;
     $ubicacion = $data['ubicacion'] ?? null;
-
     if ($tipo === 'herramienta' && $id !== null && $ubicacion !== null) {
         $sql = "UPDATE tbl_herramientas SET ubicacion_herramientas = ? WHERE id_herramientas = ?";
         $stmt = $conexion->prepare($sql);
         $stmt->bind_param("si", $ubicacion, $id);
-
         if ($stmt->execute()) {
             echo "Ubicación de herramientas actualizada.";
         } else {
@@ -20,12 +17,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $stmt->close();
     }
-
     if ($tipo === 'activo' && $id !== null && $ubicacion !== null) {
         $sql2 = "UPDATE tbl_activos SET ubicacion_activos = ? WHERE id_activos = ?";
         $stmt2 = $conexion->prepare($sql2);
         $stmt2->bind_param("si", $ubicacion, $id);
-
         if ($stmt2->execute()) {
             echo "Ubicación de activos actualizada.";
         } else {
@@ -33,7 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $stmt2->close();
     }
-
     $conexion->close();
 }
 ?>

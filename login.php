@@ -1,62 +1,51 @@
 <?php
-// Incluir archivo de conexión a la base de datos
-require_once 'conexion.php';
-
-// Inicializar variables de error y éxito
+session_start();
 $error = '';
 
-// Verificar si se envió el formulario
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Obtener los datos del formulario
-    $username = trim($_POST['username']);
+    $username = $_POST['username'];
     $password = $_POST['password'];
+    require_once("conexion.php");
 
-    // Validar que los campos no estén vacíos
-    if (empty($username) || empty($password)) {
-        $error = 'Por favor, completa todos los campos.';
-    } else {
-        // Consultar la base de datos para verificar el usuario
-        $query = "SELECT id_user, username, password, role FROM tbl_users WHERE username = ?";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param('s', $username);
+    $query = "SELECT id_user, username, password, role FROM tbl_users WHERE username = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('s', $username);
 
-        $stmt->execute();
-        $result = $stmt->get_result();
-        
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-        // Obtener el usuario
-        if ($user = $result->fetch_assoc()) {
-            // Verificar la contraseña
-            if (password_verify($password, $user['password'])) {
-                session_start();
-                $_SESSION['id_user'] = $user['id_user'];
-                $_SESSION['username'] = $user['username'];
-                $_SESSION['role'] = $user['role'];
+    if ($result->num_rows === 1) {
+        $users = $result->fetch_assoc();
+        echo "Hash almacenado: " . $users['password'] . "<br>";
+        echo "Hash generado: " . password_hash($password, PASSWORD_DEFAULT) . "<br>";
+        echo "Resultado de password_verify: " . (password_verify($password, $users['password']) ? 'true' : 'false') . "<br>";
+    
+        if (password_verify($password, $users['password'])) {
+            session_start();
+            $_SESSION['id_user'] = $users['id_user'];
+            $_SESSION['username'] = $users['username'];
+            $_SESSION['role'] = $users['role'];
 
-                // Redirigir según el rol
-                switch ($user['role']) {
-                    case 'admin':
-                        header('Location: index.php');
-                        exit;
-                    case 'user':
-                        header('Location: indexus.php');
-                        exit;
-                    case 'tecnico':
-                        header('Location: indextec.php');
-                        exit;
-                    default:
-                        $error = 'Rol de usuario desconocido.';
-                }
-            } else {
-                $error = 'Usuario o contraseña incorrectos.';
+            switch ($users['role']) {
+                case 'admin':
+                    header('Location: index.php');
+                    exit;
+                case 'user':
+                    header('Location: indexus.php');
+                    exit;
+                case 'tecnico':
+                    header('Location: indextec.php');
+                    exit;
+                default:
+                    $error = 'Rol de usuario desconocido.';
             }
         } else {
             $error = 'Usuario o contraseña incorrectos.';
         }
-
-        // Cerrar la declaración
-        $stmt->close();
+    } else {
+        $error = 'Usuario no encontrado.';
     }
+    $stmt->close();
 }
 ?>
 <!DOCTYPE html>

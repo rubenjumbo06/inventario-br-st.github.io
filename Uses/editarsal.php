@@ -6,72 +6,69 @@ if ($conn->connect_error) {
     die("Error de conexión: " . $conn->connect_error);
 }
 
-if (isset($_GET['id_consumibles']) && is_numeric($_GET['id_consumibles'])) {
-    $id_consumibles = intval($_GET['id_consumibles']);
-    $sql = "SELECT * FROM tbl_consumibles WHERE id_consumibles = ?";
+// Verificar que el parámetro id_salidas esté presente y sea numérico
+if (isset($_GET['id_salidas']) && is_numeric($_GET['id_salidas'])) {
+    $id_salidas = intval($_GET['id_salidas']);
+    // Obtener los datos de la salida
+    $sql = "SELECT * FROM tbl_reg_salidas WHERE id_salidas = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $id_consumibles);
+    $stmt->bind_param("i", $id_salidas);
     $stmt->execute();
     $result = $stmt->get_result();
-    $consumible = $result->fetch_assoc();
+    $salidas = $result->fetch_assoc();
 
-    if (!$consumible) {
-        die("Consumible no encontrado.");
+    // Verificar si se encontró la salida
+    if (!$salidas) {
+        die("Salida no encontrada.");
     }
 } else {
-    die("ID inválido.");
+    die("ID inválido o no proporcionado.");
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     var_dump($_POST); // Verificar los datos del formulario
 
     // Obtener los valores del formulario
-    $nombre_consumibles = $_POST['nombre_consumibles'] ?? null;
-    $cantidad_consumibles = $_POST['cantidad_consumibles'] ?? null;
-    $id_empresa = $_POST['id_empresa'] ?? null;
-    $estado_consumibles = $_POST['estado_consumibles'] ?? null;
-    $utilidad_consumibles = $_POST['utilidad_consumibles'] ?? null;
+    $items = $_POST['items'] ?? null;
+    $titulo = $_POST['titulo'] ?? null;
+    $Destino = $_POST['Destino'] ?? null;
+    $body = $_POST['body'] ?? null;
     $id_user = $_POST['id_user'] ?? null;
 
     // Construir la consulta SQL dinámicamente
-    $sql = "UPDATE tbl_consumibles SET ";
+    $sql = "UPDATE tbl_reg_salidas SET ";
     $params = [];
     $types = "";
 
-    if (!empty($nombre_consumibles)) {
-        $sql .= "nombre_consumibles=?, ";
-        $params[] = $nombre_consumibles;
+    if (!empty($items)) {
+        $sql .= "items=?, ";
+        $params[] = $items;
         $types .= "s";
     }
-    if (!empty($cantidad_consumibles)) {
-        $sql .= "cantidad_consumibles=?, ";
-        $params[] = $cantidad_consumibles;
-        $types .= "i";
+    if (!empty($titulo)) {
+        $sql .= "titulo=?, ";
+        $params[] = $titulo;
+        $types .= "s";
     }
-    if (!empty($id_empresa)) {
-        $sql .= "id_empresa=?, ";
-        $params[] = $id_empresa;
-        $types .= "i"; // Cambia a "i" si id_empresa es un entero
+    if (!empty($Destino)) {
+        $sql .= "Destino=?, ";
+        $params[] = $Destino;
+        $types .= "s";
     }
-    if (!empty($estado_consumibles)) {
-        $sql .= "estado_consumibles=?, ";
-        $params[] = $estado_consumibles;
-        $types .= "i";
-    }
-    if (!empty($utilidad_consumibles)) {
-        $sql .= "utilidad_consumibles=?, ";
-        $params[] = $utilidad_consumibles;
+    if (!empty($body)) {
+        $sql .= "body=?, ";
+        $params[] = $body;
         $types .= "s";
     }
     if (!empty($id_user)) {
         $sql .= "id_user=?, ";
         $params[] = $id_user;
-        $types .= "i"; // Cambia a "i" si id_user es un entero
+        $types .= "i";
     }
 
     // Si no hay campos para actualizar, redirigir sin hacer cambios
     if (empty($params)) {
-        echo "<script>alert('No se realizaron cambios'); window.location.href='../pages/consumibles.php';</script>";
+        echo "<script>alert('No se realizaron cambios'); window.location.href='../pages/salidas.php';</script>";
         exit();
     }
 
@@ -79,8 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $sql = rtrim($sql, ", ");
 
     // Agregar la condición WHERE
-    $sql .= " WHERE id_consumibles=?";
-    $params[] = $id_consumibles;
+    $sql .= " WHERE id_salidas=?";
+    $params[] = $id_salidas;
     $types .= "i";
 
     // Preparar y ejecutar la consulta
@@ -88,10 +85,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param($types, ...$params);
 
     if ($stmt->execute()) {
-        echo "<script>window.location.href='../pages/consumibles.php';</script>";
+        echo "<script>window.location.href='../pages/salidas.php';</script>";
     } else {
-        echo "<script>alert('Error al actualizar el consumible');</script>";
-        echo $stmt->error; // Mostrar errores en la ejecución de la consulta
+        echo "<script>alert('Error al actualizar la salida');</script>";
+        echo $stmt->error;
     }
 }
 ?>
@@ -102,7 +99,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agregar Datos</title>
-
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../assets/CSS/agg.css">
 </head>
@@ -115,70 +111,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="text-base text-[var(--verde-oscuro)]">Agregar Datos</div>
                     </strong>
                     <div class="mt-2 text-sm text-[var(--verde-oscuro)]">
-                        Editando tabla: Consumibles
+                        Editando tabla: Salidas
                     </div>
                 </div>
             </div>
         </div>
 
         <form method="POST">
-
             <div class="grid grid-cols-2 gap-6 mb-10">
-                <!-- Nombre -->
+                <!-- Items -->
                 <div id="input" class="relative">
-                    <input type="text" id="nombre_consumibles" name="nombre_consumibles" value="<?= htmlspecialchars($consumible['nombre_consumibles']) ?>"
+                    <input type="text" id="items" name="items" value="<?= htmlspecialchars($salidas['items'] ?? '') ?>"
                         class="block w-full text-sm h-[50px] px-4 text-slate-900 bg-white rounded-[8px] border border-violet-200 appearance-none focus:border-transparent focus:outline focus:outline-primary focus:ring-0 hover:border-brand-500-secondary peer invalid:border-error-500 invalid:focus:border-error-500 overflow-ellipsis overflow-hidden text-nowrap pr-[48px]"
-                        placeholder="Nombre"/>
-                    <label for="nombre"
+                        placeholder="Items"/>
+                    <label for="items"
                         class="peer-placeholder-shown:-z-10 peer-focus:z-10 absolute text-[14px] leading-[150%] text-primary peer-focus:text-primary peer-invalid:text-error-500 focus:invalid:text-error-500 duration-300 transform -translate-y-[1.2rem] scale-75 top-2 z-10 origin-[0] bg-white disabled:bg-gray-50-background- px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-[1.2rem] rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">
-                        Nombre
+                        Items
                     </label>
                 </div>
 
-                <!-- Cantidad -->
+                <!-- Titulo -->
                 <div id="input" class="relative">
-                    <input type="number" id="cantidad_consumibles" name="cantidad_consumibles" value="<?= htmlspecialchars($consumible['cantidad_consumibles']) ?>"
+                    <input type="text" id="titulo" name="titulo" value="<?= htmlspecialchars($salidas['titulo'] ?? '') ?>"
                         class="block w-full text-sm h-[50px] px-4 text-slate-900 bg-white rounded-[8px] border border-violet-200 appearance-none focus:border-transparent focus:outline focus:outline-primary focus:ring-0 hover:border-brand-500-secondary peer invalid:border-error-500 invalid:focus:border-error-500 overflow-ellipsis overflow-hidden text-nowrap pr-[48px]"
-                        placeholder="Cantidad"/>
-                    <label for="cantidad"
+                        placeholder="Titulo"/>
+                    <label for="titulo"
                         class="peer-placeholder-shown:-z-10 peer-focus:z-10 absolute text-[14px] leading-[150%] text-primary peer-focus:text-primary peer-invalid:text-error-500 focus:invalid:text-error-500 duration-300 transform -translate-y-[1.2rem] scale-75 top-2 z-10 origin-[0] bg-white disabled:bg-gray-50-background- px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-[1.2rem] rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">
-                        Cantidad
+                        Titulo
                     </label>
                 </div>
                 
-                <!-- Empresa -->
+                <!-- Destino -->
                 <div id="input" class="relative">
-                    <select name="id_empresa" id="empresa_select" class="block w-full text-sm h-[50px] px-4 text-slate-900 bg-white rounded-[8px] border border-violet-200 appearance-none focus:border-transparent focus:outline focus:outline-primary focus:ring-0 hover:border-brand-500-secondary peer invalid:border-error-500 invalid:focus:border-error-500 overflow-hidden pr-[48px]">
-                        <option value="" disabled selected>Selecciona una Empresa</option>
-                    </select>
-                    <label
-                        for="floating_outlined"
-                        class="absolute text-[14px] leading-[150%] text-primary peer-focus:text-primary peer-invalid:text-error-500 focus:invalid:text-error-500 duration-300 transform -translate-y-[1.2rem] scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-[1.2rem] start-1">
-                        Empresa
+                    <textarea id="Destino" name="Destino" 
+                        class="block w-full text-sm px-4 py-2 text-slate-900 bg-white rounded-[8px] border border-violet-200 appearance-none focus:border-transparent focus:outline focus:outline-primary focus:ring-0 hover:border-brand-500-secondary peer invalid:border-error-500 invalid:focus:border-error-500 overflow-ellipsis overflow-hidden"
+                        placeholder="Destino" required><?= htmlspecialchars($salidas['Destino'] ?? '') ?></textarea>
+                    <label for="Destino"
+                        class="peer-placeholder-shown:-z-10 peer-focus:z-10 absolute text-[14px] leading-[150%] text-primary peer-focus:text-primary peer-invalid:text-error-500 focus:invalid:text-error-500 duration-300 transform -translate-y-[1.2rem] scale-75 top-2 z-10 origin-[0] bg-white disabled:bg-gray-50-background- px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-[1.2rem] rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">
+                        Destino 
                     </label>
                 </div>
 
-               <!-- Estado -->
+                <!-- Body -->
                 <div id="input" class="relative">
-                    <select name="estado_consumibles" id="estado_select" class="block w-full text-sm h-[50px] px-4 text-slate-900 bg-white rounded-[8px] border border-violet-200 appearance-none focus:border-transparent focus:outline focus:outline-primary focus:ring-0 hover:border-brand-500-secondary peer invalid:border-error-500 invalid:focus:border-error-500 overflow-hidden pr-[48px]">
-                        <option value="" disabled selected>Selecciona un Estado</option>
-                    </select>
-                    <label
-                        for="floating_outlined"
-                        class="absolute text-[14px] leading-[150%] text-primary peer-focus:text-primary peer-invalid:text-error-500 focus:invalid:text-error-500 duration-300 transform -translate-y-[1.2rem] scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-[1.2rem] start-1">
-                        Estado
-                    </label>
-                </div>
-
-                <!-- Utilidad -->
-                <div id="input" class="relative">
-                    <select name="utilidad_consumibles" id="estado_select" class="block w-full text-sm h-[50px] px-4 text-slate-900 bg-white rounded-[8px] border border-violet-200 appearance-none focus:border-transparent focus:outline focus:outline-primary focus:ring-0 hover:border-brand-500-secondary peer invalid:border-error-500 invalid:focus:border-error-500 overflow-hidden pr-[48px]">
-                        <option value="" disabled selected>Selecciona una Utilidad</option>
-                    </select>
-                    <label
-                        for="floating_outlined"
-                        class="absolute text-[14px] leading-[150%] text-primary peer-focus:text-primary peer-invalid:text-error-500 focus:invalid:text-error-500 duration-300 transform -translate-y-[1.2rem] scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-[1.2rem] start-1">
-                        Utilidad
+                    <textarea id="body" name="body" 
+                        class="block w-full text-sm px-4 py-2 text-slate-900 bg-white rounded-[8px] border border-violet-200 appearance-none focus:border-transparent focus:outline focus:outline-primary focus:ring-0 hover:border-brand-500-secondary peer invalid:border-error-500 invalid:focus:border-error-500 overflow-ellipsis overflow-hidden"
+                        placeholder="Cuerpo" required><?= htmlspecialchars($salidas['body'] ?? '') ?></textarea>
+                    <label for="body"
+                        class="peer-placeholder-shown:-z-10 peer-focus:z-10 absolute text-[14px] leading-[150%] text-primary peer-focus:text-primary peer-invalid:text-error-500 focus:invalid:text-error-500 duration-300 transform -translate-y-[1.2rem] scale-75 top-2 z-10 origin-[0] bg-white disabled:bg-gray-50-background- px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-[1.2rem] rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">
+                        Cuerpo 
                     </label>
                 </div>
 
@@ -193,7 +174,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         Usuario
                     </label>
                 </div>
-               
             </div>
 
             <div class="sm:flex sm:flex-row-reverse flex gap-4">
@@ -244,17 +224,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 data.forEach(item => {
                     let option = document.createElement("option");
-                    option.value = item.id_empresa || item.id_estado || item.id_utilidad || item.id_user;
-                    option.textContent = item.nombre || item.nombre_estado || item.nombre_utilidad || item.username ;
+                    option.value = item.id_user;
+                    option.textContent = item.username ;
                     select.appendChild(option);
                 });
             })
             .catch(error => console.error("Error cargando los datos:", error));
     }
-        cargarDatos("get_empresas.php", "empresa_select");
-        cargarDatos("get_estados.php", "estado_select");
         cargarDatos("get_users.php", "users_select");
-        cargarDatos("get_utilidades.php", "utilidad_select");
         });
     </script>
 </body>

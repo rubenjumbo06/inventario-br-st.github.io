@@ -1,10 +1,8 @@
 <?php
 require_once("../conexion.php"); // Asegúrate de que este archivo exista y tenga la conexión correcta.
-
 $sql = "SELECT id_consumibles, nombre_consumibles, cantidad_consumibles, id_empresa, estado_consumibles, utilidad_consumibles, fecha_ingreso, id_user FROM tbl_consumibles";
 $result = $conn->query($sql);
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -15,8 +13,6 @@ $result = $conn->query($sql);
 </head>
 <body class="bg-[var(--beige)]">
 <?php include 'header.php'; ?>
-
-        <!-- Contenedor Principal -->
         <div class="flex justify-between items-center mt-4 px-4">
             <p class="text-white text-sm sm:text-lg text-shadow">
                 <strong>User:</strong> <?php echo htmlspecialchars($usuario); ?> 
@@ -26,12 +22,10 @@ $result = $conn->query($sql);
                 <strong>Fecha/Hora Ingreso:</strong> Cargando...
             </p>
         </div>
-
     <main class="container">
         <strong>
         <h1 class="title text-shadow">Inventario de Consumibles</h1>    
         </strong>
-
         <table>
             <thead>
                 <tr>
@@ -66,7 +60,6 @@ $result = $conn->query($sql);
                 <?php endwhile; ?>
             </tbody>
         </table>
-
         <div class="centered-button">
             <a href="../Uses/agregaract.php">
                 <button id="addBtn">Agregar Nuevo</button>
